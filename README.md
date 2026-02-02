@@ -6,7 +6,7 @@
 This repository contains the PyTorch implementation for **Hyperbolic Asymmetric Multi-view Clustering (HAMC)**.
 ## Requirements
 
-The code is implemented in Python 3.8+ and PyTorch 1.7+.
+The code is implemented in Python 3.10+ and PyTorch 2.9+.
 
 Install the required dependencies:
 
