@@ -119,8 +119,8 @@ def run_training(model, dataloader, full_dataloader, args, Y_true, best_ckpt_pat
             dist_10 = hyp.dist(zs[1], zs[0].detach()) 
             w10 = torch.clamp(H1 - H0, min=0).detach() 
             w01 = torch.clamp(H0 - H1, min=0).detach()
-            loss_align = (w10 * dist_10 + w01 * dist_01).mean()
-
+            # loss_align = (w10 * dist_10 + w01 * dist_01).mean()
+            loss_align = 0.5 * (w10 * dist_10.pow(2) + w01 * dist_01.pow(2)).mean()
             # 4. Clustering Target & Mask
             avg_logits = alpha0 * (-dist_v0) + alpha1 * (-dist_v1)
             Q_final = sinkhorn_knopp(avg_logits)
@@ -263,8 +263,8 @@ if __name__ == '__main__':
     parser.add_argument('--device_num', type=int, default=0)
     parser.add_argument('--dataset', type=str, default='CUB') 
     parser.add_argument('--seed', type=int, default=1)
-    parser.add_argument('--train', default=True, type=bool)
-    parser.add_argument('--force_warmup', default=True, type=bool)
+    parser.add_argument('--train', default=False, type=bool)
+    parser.add_argument('--force_warmup', default=False, type=bool)
     # Architecture
     parser.add_argument('--batch_size', type=int, default=128)
     parser.add_argument('--latent_dim', type=int, default=64)
@@ -275,9 +275,9 @@ if __name__ == '__main__':
     # Training
     parser.add_argument('--epochs', type=int, default=50)
     parser.add_argument('--lr', type=float, default=5e-4)
-    parser.add_argument('--momentum', type=float, default=0.95)
+    parser.add_argument('--momentum', type=float, default=0.98)
     parser.add_argument('--tau', type=float, default=0.3)
     parser.add_argument('--temp_gate', type=float, default=0.7)
-    parser.add_argument('--loss_clu_weight', type=float, default=1.0)
+    parser.add_argument('--loss_clu_weight', type=float, default=0.1)
     parser.add_argument('--loss_align_weight', type=float, default=1.0)
     main()

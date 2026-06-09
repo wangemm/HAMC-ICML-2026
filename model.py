@@ -88,7 +88,6 @@ class HAMC_Model(nn.Module):
 
     def forward(self, xs):
         vs = [enc(x) for enc, x in zip(self.encoders, xs)]
-        vs = [F.normalize(v, p=2, dim=1) for v in vs]
         zs = [self.hyp.exp_map(v) for v in vs]
         xs_rec = [dec(v) for dec, v in zip(self.decoders, vs)]
         return vs, zs, xs_rec
